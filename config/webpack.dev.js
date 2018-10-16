@@ -1,26 +1,71 @@
+let website = {
+  publicPatch:'http://localhost:8888/'
+}
 const path = require ("path")
-const uglify = require('uglifyjs-webpack-plugin');
-const htmlPlugin= require('html-webpack-plugin');
+const uglify = require("uglifyjs-webpack-plugin"); //压缩
+const htmlPlugin= require("html-webpack-plugin"); //html打包
+const extractTextPlugin = require("extract-text-webpack-plugin"); // css分离
 module.exports = {
   mode:'development',
   //入口文件的配置项
   entry:{
     //里面的main是可以自定义
-    app:'./src/js/app.js',
+    app:'./src/app.js',
   },
   //出口文件
   output:{
     //打包的路径
+    path: path.resolve(__dirname,'../dist'),
     filename: '[name].js',//打包文件一致
-    path: path.resolve(__dirname,'../dist')
+    publicPath:website.publicPatch //publicPatch:主要作用处理静态文件路径
   },
   //方便调试
   devtool:"eval-source-map",
   //模块:解析css，图片，压缩
   module:{
     rules:[
-      { test: /\.css$/, use: 'style-loader' },
-      { test: /\.css$/, use: 'css-loader' }
+      // css loader
+      { test: /\.css$/,
+        use:extractTextPlugin.extract({
+          fallback:"style-loader",
+          use:"css-loader"
+        })
+      },
+      //less loader
+      {
+        test: /\.less$/,
+        use: extractTextPlugin.extract({
+          use: [{
+              loader: "css-loader"
+          }, {
+              loader: "less-loader"
+          }],
+          // use style-loader in development
+          fallback: "style-loader"
+        })
+      },
+      {
+        test: /\.scss$/,
+        use: extractTextPlugin.extract({
+            use: [{
+                loader: "css-loader"
+            }, {
+                loader: "sass-loader"
+            }],
+            // use style-loader in development
+            fallback: "style-loader"
+        })
+      },
+      //img处理
+      {
+        test:/\.(png|jpg|gif|jpeg)/,
+        use:[{
+          loader:'url-loader', //是指定使用的loader和loader的配置参数
+          options:{
+            limit:500 //是把小于500B的文件打成Base64的格式，写入JS
+          }
+        }]
+      }
     ]
   },
   //插件，用于生产模板和各项功能
@@ -34,7 +79,11 @@ module.exports = {
         },
         hash:true, //为了开发中js有缓存效果，所以加入hash，这样可以有效避免缓存JS。
         template:'./src/index.html' //是要打包的html模版路径和文件名称。
-
+    }),
+    //分离css
+    new extractTextPlugin({
+      filename:'[name].css',
+      ignoreOrder:true,
     })
   ],
   //配置webpack开发服务功能
