@@ -44,6 +44,7 @@ module.exports = {
           fallback: "style-loader"
         })
       },
+      //sass
       {
         test: /\.scss$/,
         use: extractTextPlugin.extract({
@@ -65,7 +66,20 @@ module.exports = {
             limit:500 //是把小于500B的文件打成Base64的格式，写入JS
           }
         }]
-      }
+      },
+      //babel 配置
+      // {
+      //   test: /\.(jsx|js)$/,
+      //   use: {
+      //     loader: 'babel-loader',
+      //     options: {
+      //       presets: [
+      //         "es2015", "react"
+      //       ]
+      //     }
+      //   },
+      //   exclude: /node_modules/
+      // }
     ]
   },
   //插件，用于生产模板和各项功能
