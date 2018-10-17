@@ -5,12 +5,17 @@ const path = require ("path")
 const uglify = require("uglifyjs-webpack-plugin"); //压缩
 const htmlPlugin= require("html-webpack-plugin"); //html打包
 const extractTextPlugin = require("extract-text-webpack-plugin"); // css分离
+const { VueLoaderPlugin } = require('vue-loader');
 module.exports = {
   mode:'development',
   //入口文件的配置项
   entry:{
     //里面的main是可以自定义
-    app:'./src/app.js',
+    vue: './src/vendor/vue.js',
+    vueRouter: './src/vendor/vue-router.js',
+    vuex: './src/vendor/vuex.js',
+    axios: './src/vendor/axios.min.js',
+    app: './src/app.js',
   },
   //出口文件
   output:{
@@ -21,6 +26,12 @@ module.exports = {
   },
   //方便调试
   devtool:"eval-source-map",
+  resolve: {
+    alias: {
+      'vue$': 'vue/dist/vue.js',
+      'components': path.resolve(__dirname, '../src/components')
+    }
+  },
   //模块:解析css，图片，压缩
   module:{
     rules:[
@@ -68,18 +79,18 @@ module.exports = {
         }]
       },
       //babel 配置
-      // {
-      //   test: /\.(jsx|js)$/,
-      //   use: {
-      //     loader: 'babel-loader',
-      //     options: {
-      //       presets: [
-      //         "es2015", "react"
-      //       ]
-      //     }
-      //   },
-      //   exclude: /node_modules/
-      // }
+      {
+        test: /\.(jsx|js)$/,
+        use: {
+          loader: 'babel-loader',
+        },
+        exclude: /node_modules/
+      },
+      //vue 配置
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader'
+      },
     ]
   },
   //插件，用于生产模板和各项功能
@@ -98,7 +109,8 @@ module.exports = {
     new extractTextPlugin({
       filename:'[name].css',
       ignoreOrder:true,
-    })
+    }),
+    new VueLoaderPlugin()
   ],
   //配置webpack开发服务功能
   devServer:{
