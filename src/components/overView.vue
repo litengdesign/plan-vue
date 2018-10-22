@@ -6,6 +6,6 @@
         name:'overview'
     }
 </script>
-<style>
+<style scoped>
 
 </style>

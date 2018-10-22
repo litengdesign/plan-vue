@@ -14,3 +14,8 @@ https://www.jianshu.com/p/6712e4e4b8fe <br>
 1.配置vue相关信息<br>
 2.加入vue-router<br>
 
+1022更新内容<br>
+1.添加axios请求组件<br>
+2.组建间数据传递<br>
+
+

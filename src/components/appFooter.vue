@@ -10,7 +10,7 @@
                 </router-link>  
             </div>
             <div class="col-xs-3">
-                <router-link active-class="active" exact to="/">
+                <router-link active-class="active" to="/task">
                     <span class="icon-wrap">
                         <i class="icon fa fa-task"></i>
                     </span>

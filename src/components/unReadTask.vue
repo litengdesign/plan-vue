@@ -6,6 +6,6 @@
         name:'unReadTask'
     }
 </script>
-<style>
+<style scoped>
 
 </style>
