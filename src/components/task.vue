@@ -23,79 +23,38 @@
     export default{
         data(){
             return {
-                //任务状态类型
-                dataStatusObj:[
-                    {
-                        id: '2',
-                        name: '提交',
-                        active: true,
-                        taskList: []
-                    },
-                    {
-                        id: '1',
-                        name: '草稿',
-                        active: false,
-                        taskList: []
-                    },
-                    {
-                        id: '3',
-                        name: '归档',
-                        active: false,
-                        taskList: []
-                    }
-                ],
-                pageSize:10,
-                pageIndex:0,
-                dataStatus:null,
-                taskList:null
+                taskList:null,
+                StatusObj:this.$store.state.ctrl.dataStatusObj
             }
-
         },
         name:'task',
         components:{
             //加载的各种组件
             searchWrap,list
         },
+        // 计算属性
+        computed:{
+            dataStatusObj(){
+                return this.$store.state.ctrl.dataStatusObj
+            }
+        },
         methods:{
             //搜索方法
             getKeyword(data){
                 this.keyword = data;
             },
+            //测试state
+            setCount(){
+                this.$store.commit('increment');
+            }
         },
         created(){
-            let params = {
-                userId: this.Ctrl.userId,
-                dataStatus: this.dataStatus,
-                pageSize: this.pageSize,
-                pageIndex: this.pageIndex,
-            };
-            //获取当前页面的页码以及对应的类型id
-            this.dataStatusObj.forEach((item,index)=>{
-                if (item.active) {
-                    if (index == 0) {
-                        sessionStorage.setItem(this.Config.isDraft, 'false');
-                    }
-                    params.dataStatus = item.id;
-                    params.pageIndex = item.pageIndex || 0;
-                    this.Ctrl.pageIndex = params.pageIndex;
-                }
-            })
-            this.$axios.get(
-                this.Config.GetTaskInfoList_url,{
-                    params:params
-                }
-            ).then(
-                (response)=>{
-                    if(response.data.errcode =='0'){
-                        this.dataStatusObj.forEach((item,index)=>{
-                            if(item.active){
-                                item.taskList = response.data.data.taskInfoData1s;
-                            }
-                        })
-                    }  
-                }).catch(function(error){
-                console.log(error);
-            })
+            //获取部门数
+            this.$store.dispatch('getUserDept');
+            //获取任务状态列表
+            this.$store.dispatch('getDataStatusList');
+            // 初始化iscroll
+            
         },
     }
 </script>

@@ -11,8 +11,6 @@ module.exports = {
   //入口文件的配置项
   entry:{
     //里面的main是可以自定义
-    jquery:'./src/vendor/jquery-2.1.4.min',
-    bootstrap:'./src/vendor/bootstrap',
     app: './src/app.js',
   },
   //出口文件

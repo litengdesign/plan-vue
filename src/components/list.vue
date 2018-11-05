@@ -7,11 +7,11 @@
 </template>
 <script>
     import taskItem from './taskItem.vue'
-    import Config from '../global'
     export default{
         props: ['taskList'],
-        data:{
-            taskList:null
+        data(){
+            return{
+            }
         },
         name:'list',
         components:{taskItem},

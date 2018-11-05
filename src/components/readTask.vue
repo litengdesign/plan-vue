@@ -6,6 +6,6 @@
         name:'readTask'
     }
 </script>
-<style>
+<style scoped>
 
 </style>
